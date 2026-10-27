@@ -1,0 +1,6 @@
+{
+  "name": "Euphoria Check - Medidor PERMA",
+  "description": "Avalie sua felicidade, bem-estar e florescimento com base no Modelo PERMA da psicologia positiva do Dr. Martin Seligman.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
