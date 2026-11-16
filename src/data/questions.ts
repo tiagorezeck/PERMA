@@ -1,276 +1,285 @@
 import { Question } from '../types/perma';
 
+/**
+ * Os 23 itens oficiais do PERMA-Profiler (Butler & Kern, 2016),
+ * na ordem padronizada original e adaptados para o Português do Brasil.
+ * Escala Likert contínua de 11 pontos (0 a 10).
+ */
 export const PERMA_QUESTIONS: Question[] = [
-  // --- Emoções Positivas (P) ---
   {
-    id: 'avalue',
+    id: 'q1',
     number: 1,
-    pillar: 'pos',
-    pillarName: 'Emoções Positivas',
-    category: 'Bem-Estar Emocional',
-    text: 'Com que frequência você se sente alegre e feliz no seu cotidiano?',
-    options: [
-      { label: 'Frequentemente (5 pontos)', value: 5 },
-      { label: 'Raramente (0 pontos)', value: 0 }
-    ],
-    explanation: 'Mede a presença constante de sentimentos de alegria, contentamento e satisfação com o momento presente.'
+    subscale: 'acc',
+    subscaleName: 'Realização (A)',
+    scaleType: 'frequency',
+    text: 'Com que frequência você sente que está progredindo na realização de seus objetivos?',
+    anchorMin: 'Nunca',
+    anchorMid: 'Às vezes',
+    anchorMax: 'Sempre',
+    explanation: 'Avalia a percepção contínua de avanço em direção às metas pessoais e profissionais.'
   },
   {
-    id: 'bvalue',
+    id: 'q2',
     number: 2,
-    pillar: 'pos',
-    pillarName: 'Emoções Positivas',
-    category: 'Bem-Estar Emocional',
-    text: 'Você frequentemente vivencia sensações de entusiasmo e empolgação com o que faz?',
-    options: [
-      { label: 'Frequentemente (5 pontos)', value: 5 },
-      { label: 'Raramente (0 pontos)', value: 0 }
-    ],
-    explanation: 'Avalia a vitalidade e a energia positiva diante de projetos, conversas e atividades.'
+    subscale: 'eng',
+    subscaleName: 'Engajamento (E)',
+    scaleType: 'frequency',
+    text: 'Com que frequência você fica completamente absorvido(a) no que está fazendo?',
+    anchorMin: 'Nunca',
+    anchorMid: 'Às vezes',
+    anchorMax: 'Sempre',
+    explanation: 'Mede a imersão profunda e o foco concentrado em atividades do cotidiano (estado de Flow).'
   },
   {
-    id: 'cvalue',
+    id: 'q3',
     number: 3,
-    pillar: 'pos',
-    pillarName: 'Emoções Positivas',
-    category: 'Bem-Estar Emocional',
-    text: 'Com que frequência você se sente grato(a) pelas coisas boas da sua vida?',
-    options: [
-      { label: 'Frequentemente (5 pontos)', value: 5 },
-      { label: 'Raramente (0 pontos)', value: 0 }
-    ],
-    explanation: 'A gratidão é um dos pilares mais fortes para cultivar a resiliência e a felicidade sustentável.'
+    subscale: 'pos',
+    subscaleName: 'Emoções Positivas (P)',
+    scaleType: 'frequency',
+    text: 'De modo geral, com que frequência você se sente alegre?',
+    anchorMin: 'Nunca',
+    anchorMid: 'Às vezes',
+    anchorMax: 'Sempre',
+    explanation: 'Captura a frequência geral de sentimentos de alegria e bem-estar hedônico.'
   },
   {
-    id: 'dvalue',
+    id: 'q4',
     number: 4,
-    pillar: 'pos',
-    pillarName: 'Emoções Positivas',
-    category: 'Bem-Estar Emocional',
-    text: 'Você costuma sentir ciúmes, inveja ou ressentimento em relação aos outros?',
-    isReversed: true,
-    options: [
-      { label: 'Não / Raramente (5 pontos)', value: 5 },
-      { label: 'Sim / Frequentemente (0 pontos)', value: 0 }
-    ],
-    explanation: 'Emoções hostis como inveja ou ciúmes minam o bem-estar e a paz interior.'
+    subscale: 'neg',
+    subscaleName: 'Emoções Negativas (N)',
+    scaleType: 'frequency',
+    text: 'De modo geral, com que frequência você se sente ansioso(a)?',
+    anchorMin: 'Nunca',
+    anchorMid: 'Às vezes',
+    anchorMax: 'Sempre',
+    explanation: 'Indicador complementar que mede tensão, preocupação excessiva ou sobrecarga ansiosa.'
   },
-
-  // --- Engajamento (E) ---
   {
-    id: 'evalue',
+    id: 'q5',
     number: 5,
-    pillar: 'eng',
-    pillarName: 'Engajamento',
-    category: 'Conexão e Desafio',
-    text: 'Você busca ativamente novos desafios para se manter estimulado(a) e engajado(a)?',
-    options: [
-      { label: 'Frequentemente (5 pontos)', value: 5 },
-      { label: 'Raramente (0 pontos)', value: 0 }
-    ],
-    explanation: 'O engajamento surge quando habilidades pessoais se alinham a desafios estimulantes.'
+    subscale: 'acc',
+    subscaleName: 'Realização (A)',
+    scaleType: 'frequency',
+    text: 'Com que frequência você alcança as metas importantes que estabeleceu para si mesmo(a)?',
+    anchorMin: 'Nunca',
+    anchorMid: 'Às vezes',
+    anchorMax: 'Sempre',
+    explanation: 'Mede a capacidade de concluir objetivos relevantes e experimentar senso de conquista.'
   },
   {
-    id: 'fvalue',
+    id: 'q6',
     number: 6,
-    pillar: 'eng',
-    pillarName: 'Engajamento',
-    category: 'Estado de Flow',
-    text: 'Ao realizar atividades que você gosta, com que frequência você perde a noção do tempo?',
-    options: [
-      { label: 'Frequentemente (5 pontos)', value: 5 },
-      { label: 'Raramente (0 pontos)', value: 0 }
-    ],
-    explanation: 'Perder a noção do tempo é a marca do estado de "Flow" (fluxo), onde a mente opera no ápice do foco.'
+    subscale: 'health',
+    subscaleName: 'Saúde Física (H)',
+    scaleType: 'health',
+    text: 'De modo geral, como você avalia a sua saúde física?',
+    anchorMin: 'Péssima',
+    anchorMid: 'Regular',
+    anchorMax: 'Excelente',
+    explanation: 'Autoavaliação subjetiva da vitalidade e condição física geral, um correlato direto do bem-estar.'
   },
   {
-    id: 'gvalue',
+    id: 'q7',
     number: 7,
-    pillar: 'eng',
-    pillarName: 'Engajamento',
-    category: 'Concentração Plena',
-    text: 'Com que frequência você fica completamente absorvido(a) naquilo que está realizando?',
-    options: [
-      { label: 'Frequentemente (5 pontos)', value: 5 },
-      { label: 'Raramente (0 pontos)', value: 0 }
-    ],
-    explanation: 'Mede a capacidade de imersão profunda sem distrações cognitivas constantes.'
+    subscale: 'mea',
+    subscaleName: 'Sentido & Propósito (M)',
+    scaleType: 'extent',
+    text: 'De modo geral, até que ponto você leva uma vida com propósito e significado?',
+    anchorMin: 'Nem um pouco',
+    anchorMid: 'Moderadamente',
+    anchorMax: 'Completamente',
+    explanation: 'Avalia o quanto suas escolhas e trajetória estão conectadas a um propósito maior.'
   },
   {
-    id: 'hvalue',
+    id: 'q8',
     number: 8,
-    pillar: 'eng',
-    pillarName: 'Engajamento',
-    category: 'Espontaneidade e Expressão',
-    text: 'Você se sente livre e à vontade para dançar ou expressar sua personalidade sem medo do julgamento alheio?',
-    options: [
-      { label: 'Sim / À vontade (5 pontos)', value: 5 },
-      { label: 'Não / Inibido(a) (0 pontos)', value: 0 }
-    ],
-    explanation: 'A desinibição autêntica e a expressão corporal espontânea refletem alto engajamento com a própria vida.'
+    subscale: 'rel',
+    subscaleName: 'Relacionamentos (R)',
+    scaleType: 'extent',
+    text: 'Até que ponto você recebe ajuda e apoio de outras pessoas quando precisa?',
+    anchorMin: 'Nem um pouco',
+    anchorMid: 'Moderadamente',
+    anchorMax: 'Completamente',
+    explanation: 'Mede a percepção de suporte social disponível nos momentos de dificuldade.'
   },
-
-  // --- Relacionamentos (R) ---
   {
-    id: 'ivalue',
+    id: 'q9',
     number: 9,
-    pillar: 'rel',
-    pillarName: 'Relacionamentos',
-    category: 'Rede de Apoio',
-    text: 'Você sente que possui uma rede sólida de apoio formada por amigos, familiares ou pessoas queridas?',
-    options: [
-      { label: 'Sim / Tenho apoio (5 pontos)', value: 5 },
-      { label: 'Não / Sinto falta (0 pontos)', value: 0 }
-    ],
-    explanation: 'Saber que existem pessoas com quem contar nos momentos de crise fortalece a saúde mental.'
+    subscale: 'mea',
+    subscaleName: 'Sentido & Propósito (M)',
+    scaleType: 'extent',
+    text: 'De modo geral, até que ponto você sente que o que faz na sua vida tem valor e vale a pena?',
+    anchorMin: 'Nem um pouco',
+    anchorMid: 'Moderadamente',
+    anchorMax: 'Completamente',
+    explanation: 'Avalia o senso de relevância e importância atribuído às ações e papéis que você desempenha.'
   },
   {
-    id: 'jvalue',
+    id: 'q10',
     number: 10,
-    pillar: 'rel',
-    pillarName: 'Relacionamentos',
-    category: 'Conexões Inspiradoras',
-    text: 'Com que frequência você passa tempo de qualidade com pessoas que te inspiram e colocam você para cima?',
-    options: [
-      { label: 'Frequentemente (5 pontos)', value: 5 },
-      { label: 'Raramente (0 pontos)', value: 0 }
-    ],
-    explanation: 'Estar ao redor de indivíduos generosos e motivadores nutre diretamente o otimismo diário.'
+    subscale: 'eng',
+    subscaleName: 'Engajamento (E)',
+    scaleType: 'extent',
+    text: 'De modo geral, até que ponto você se sente entusiasmado(a) e interessado(a) pelas coisas?',
+    anchorMin: 'Nem um pouco',
+    anchorMid: 'Moderadamente',
+    anchorMax: 'Completamente',
+    explanation: 'Captura a curiosidade, o interesse ativo e a vitalidade cognitiva diante do mundo.'
   },
   {
-    id: 'kvalue',
+    id: 'q11',
     number: 11,
-    pillar: 'rel',
-    pillarName: 'Relacionamentos',
-    category: 'Vulnerabilidade Saudável',
-    text: 'Você se sente confortável em compartilhar seus pensamentos, sentimentos e vulnerabilidades com os outros?',
-    options: [
-      { label: 'Sim / Confortável (5 pontos)', value: 5 },
-      { label: 'Não / Reservado(a) (0 pontos)', value: 0 }
-    ],
-    explanation: 'Relações profundas exigem abertura mútua e coragem para ser autêntico.'
+    subscale: 'loneliness',
+    subscaleName: 'Solidão',
+    scaleType: 'extent',
+    text: 'Quão solitário(a) você se sente no seu dia a dia?',
+    anchorMin: 'Nem um pouco',
+    anchorMid: 'Moderadamente',
+    anchorMax: 'Completamente',
+    explanation: 'Item isolado oficial que identifica sentimento subjetivo de isolamento, mesmo quando cercado por pessoas.'
   },
   {
-    id: 'lvalue',
+    id: 'q12',
     number: 12,
-    pillar: 'rel',
-    pillarName: 'Relacionamentos',
-    category: 'Autonomia Afetiva',
-    text: 'Você sente que depende desesperadamente de um parceiro(a) para conseguir se sentir feliz?',
-    isReversed: true,
-    options: [
-      { label: 'Não / Sou autônomo(a) (5 pontos)', value: 5 },
-      { label: 'Sim / Sinto carência dependente (0 pontos)', value: 0 }
-    ],
-    explanation: 'Relacionamentos saudáveis florescem a partir da inteireza pessoal, não da codependência.'
+    subscale: 'health',
+    subscaleName: 'Saúde Física (H)',
+    scaleType: 'satisfaction',
+    text: 'Quão satisfeito(a) você está com a sua saúde física atual?',
+    anchorMin: 'Nada satisfeito(a)',
+    anchorMid: 'Moderadamente',
+    anchorMax: 'Completamente satisfeito(a)',
+    explanation: 'Mede o grau de satisfação pessoal com a própria disposição, energia e funcionamento físico.'
   },
-
-  // --- Significado e Propósito (M) ---
   {
-    id: 'mvalue',
+    id: 'q13',
     number: 13,
-    pillar: 'mea',
-    pillarName: 'Sentido / Propósito',
-    category: 'Direção Existencial',
-    text: 'Você sente um senso claro de propósito e direção em sua trajetória de vida?',
-    options: [
-      { label: 'Sim / Tenho clareza (5 pontos)', value: 5 },
-      { label: 'Não / Sinto desorientação (0 pontos)', value: 0 }
-    ],
-    explanation: 'Ter uma causa ou valor pelo qual viver é um protetor essencial contra o vazio existencial.'
+    subscale: 'pos',
+    subscaleName: 'Emoções Positivas (P)',
+    scaleType: 'frequency',
+    text: 'De modo geral, com que frequência você se sente positivo(a)?',
+    anchorMin: 'Nunca',
+    anchorMid: 'Às vezes',
+    anchorMax: 'Sempre',
+    explanation: 'Avalia a disposição afetiva favorável, otimista e receptiva ao longo dos dias.'
   },
   {
-    id: 'nvalue',
+    id: 'q14',
     number: 14,
-    pillar: 'mea',
-    pillarName: 'Sentido / Propósito',
-    category: 'Significado Profundo',
-    text: 'Você sente que a sua existência possui um significado maior, além das tarefas do dia a dia?',
-    options: [
-      { label: 'Sim / Sinto significado (5 pontos)', value: 5 },
-      { label: 'Não / Apenas sobrevivo (0 pontos)', value: 0 }
-    ],
-    explanation: 'O significado reside em saber que seus atos impactam algo maior do que o próprio ego.'
+    subscale: 'neg',
+    subscaleName: 'Emoções Negativas (N)',
+    scaleType: 'frequency',
+    text: 'De modo geral, com que frequência você se sente com raiva ou irritado(a)?',
+    anchorMin: 'Nunca',
+    anchorMid: 'Às vezes',
+    anchorMax: 'Sempre',
+    explanation: 'Indicador complementar que captura reatividade, frustração ou irritabilidade frequente.'
   },
   {
-    id: 'ovalue',
+    id: 'q15',
     number: 15,
-    pillar: 'mea',
-    pillarName: 'Sentido / Propósito',
-    category: 'Consumo Consciente',
-    text: 'Você gasta muito tempo consumindo conteúdo tóxico ou com comparações inúteis nas redes sociais?',
-    isReversed: true,
-    options: [
-      { label: 'Não / Uso com moderação (5 pontos)', value: 5 },
-      { label: 'Sim / Consumo em excesso (0 pontos)', value: 0 }
-    ],
-    explanation: 'O consumo digital fútil e a comparação sistemática corroem a percepção de propósito da própria vida.'
+    subscale: 'acc',
+    subscaleName: 'Realização (A)',
+    scaleType: 'frequency',
+    text: 'Com que frequência você consegue lidar bem com as suas responsabilidades?',
+    anchorMin: 'Nunca',
+    anchorMid: 'Às vezes',
+    anchorMax: 'Sempre',
+    explanation: 'Mede o senso de autoeficácia, competência e domínio sobre as demandas da vida adulta.'
   },
   {
-    id: 'pvalue',
+    id: 'q16',
     number: 16,
-    pillar: 'mea',
-    pillarName: 'Sentido / Propósito',
-    category: 'Vocação e Rotina',
-    text: 'Você sente entusiasmo e motivação na sua rotina de estudos, trabalho ou ocupação diária?',
-    options: [
-      { label: 'Sim / Bastante (5 pontos)', value: 5 },
-      { label: 'Não / Pouco ou nada (0 pontos)', value: 0 }
-    ],
-    explanation: 'Encontrar valor e coerência no trabalho transforma esforço em realização com propósito.'
+    subscale: 'neg',
+    subscaleName: 'Emoções Negativas (N)',
+    scaleType: 'frequency',
+    text: 'De modo geral, com que frequência você se sente triste?',
+    anchorMin: 'Nunca',
+    anchorMid: 'Às vezes',
+    anchorMax: 'Sempre',
+    explanation: 'Indicador complementar que monitora humor deprimido ou desânimo persistente.'
   },
-
-  // --- Realização / Conquista (A) ---
   {
-    id: 'qvalue',
+    id: 'q17',
     number: 17,
-    pillar: 'acc',
-    pillarName: 'Realização',
-    category: 'Conquistas Históricas',
-    text: 'Você já alcançou grandes objetivos ou metas importantes que você mesmo(a) estabeleceu?',
-    options: [
-      { label: 'Sim / Já alcancei (5 pontos)', value: 5 },
-      { label: 'Não / Ainda não (0 pontos)', value: 0 }
-    ],
-    explanation: 'Recordar vitórias passadas fortalece a autoeficácia para superar novos obstáculos.'
+    subscale: 'eng',
+    subscaleName: 'Engajamento (E)',
+    scaleType: 'frequency',
+    text: 'Com que frequência você perde a noção do tempo enquanto faz algo de que gosta?',
+    anchorMin: 'Nunca',
+    anchorMid: 'Às vezes',
+    anchorMax: 'Sempre',
+    explanation: 'Indicador clássico da experiência de Fluxo (Flow), onde a atenção é totalmente absorvida pela tarefa.'
   },
   {
-    id: 'rvalue',
+    id: 'q18',
     number: 18,
-    pillar: 'acc',
-    pillarName: 'Realização',
-    category: 'Validação e Legado',
-    text: 'Você acredita que seus pais, mentores ou pessoas que você respeita sentem orgulho de você?',
-    options: [
-      { label: 'Sim / Sentem orgulho (5 pontos)', value: 5 },
-      { label: 'Não / Tenho dúvidas (0 pontos)', value: 0 }
-    ],
-    explanation: 'O reconhecimento daqueles que nos formaram nutre o sentimento de dignidade e conquista.'
+    subscale: 'health',
+    subscaleName: 'Saúde Física (H)',
+    scaleType: 'health',
+    text: 'Em comparação com outras pessoas da sua idade e sexo, como está a sua saúde?',
+    anchorMin: 'Péssima',
+    anchorMid: 'Regular',
+    anchorMax: 'Excelente',
+    explanation: 'Permite calibrar a percepção de saúde física em relação ao grupo demográfico de referência.'
   },
   {
-    id: 'svalue',
+    id: 'q19',
     number: 19,
-    pillar: 'acc',
-    pillarName: 'Realização',
-    category: 'Respeito e Mérito',
-    text: 'Você sente que as pessoas reconhecem suas competências e respeitam quem você é?',
-    options: [
-      { label: 'Sim / Me sinto respeitado(a) (5 pontos)', value: 5 },
-      { label: 'Não / Sinto descaso (0 pontos)', value: 0 }
-    ],
-    explanation: 'Sentir-se respeitado pelo que se faz reforça a autoconfiança e a persistência.'
+    subscale: 'rel',
+    subscaleName: 'Relacionamentos (R)',
+    scaleType: 'extent',
+    text: 'Até que ponto você se sente amado(a) e querido(a)?',
+    anchorMin: 'Nem um pouco',
+    anchorMid: 'Moderadamente',
+    anchorMax: 'Completamente',
+    explanation: 'Mede o sentimento profundo de pertencimento afetivo e valorização por parte de outras pessoas.'
   },
   {
-    id: 'tvalue',
+    id: 'q20',
     number: 20,
-    pillar: 'acc',
-    pillarName: 'Realização',
-    category: 'Balanço de Vida',
-    text: 'Olhando para a sua trajetória até aqui, você considera que tem feito coisas boas e admiráveis?',
-    options: [
-      { label: 'Sim / Tenho orgulho (5 pontos)', value: 5 },
-      { label: 'Não / Faria tudo diferente (0 pontos)', value: 0 }
-    ],
-    explanation: 'O balanço retrospectivo positivo alimenta a esperança e a determinação para o futuro.'
+    subscale: 'mea',
+    subscaleName: 'Sentido & Propósito (M)',
+    scaleType: 'extent',
+    text: 'De modo geral, até que ponto você sente que tem um senso de direção na sua vida?',
+    anchorMin: 'Nem um pouco',
+    anchorMid: 'Moderadamente',
+    anchorMax: 'Completamente',
+    explanation: 'Avalia clareza de rumo, coerência existencial e orientação para o futuro.'
+  },
+  {
+    id: 'q21',
+    number: 21,
+    subscale: 'rel',
+    subscaleName: 'Relacionamentos (R)',
+    scaleType: 'satisfaction',
+    text: 'Quão satisfeito(a) você está com os seus relacionamentos pessoais?',
+    anchorMin: 'Nada satisfeito(a)',
+    anchorMid: 'Moderadamente',
+    anchorMax: 'Completamente satisfeito(a)',
+    explanation: 'Avalia a qualidade global dos vínculos com amigos, familiares, parceiro(a) ou colegas.'
+  },
+  {
+    id: 'q22',
+    number: 22,
+    subscale: 'pos',
+    subscaleName: 'Emoções Positivas (P)',
+    scaleType: 'extent',
+    text: 'De modo geral, até que ponto você se sente satisfeito(a) e contente com a vida?',
+    anchorMin: 'Nem um pouco',
+    anchorMid: 'Moderadamente',
+    anchorMax: 'Completamente',
+    explanation: 'Mede o contentamento tranquilo e a satisfação afetiva estável com o momento atual.'
+  },
+  {
+    id: 'q23',
+    number: 23,
+    subscale: 'happiness',
+    subscaleName: 'Felicidade Geral',
+    scaleType: 'happiness',
+    text: 'Considerando tudo em conjunto, quão feliz você diria que é?',
+    anchorMin: 'Nada feliz',
+    anchorMid: 'Moderadamente feliz',
+    anchorMax: 'Completamente feliz',
+    explanation: 'Item âncora global de felicidade que compõe, junto aos 15 itens PERMA, o Índice Geral de Bem-Estar.'
   }
 ];

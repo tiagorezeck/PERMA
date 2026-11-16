@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, ArrowRight, CheckCircle2, AlertCircle, HelpCircle, LayoutGrid, Eye, Sparkles } from 'lucide-react';
 import { Question } from '../types/perma';
-import { PILLARS_INFO } from '../data/tips';
 
 interface QuizScreenProps {
   questions: Question[];
@@ -11,6 +10,8 @@ interface QuizScreenProps {
   onCancel: () => void;
   onLoadDemo?: () => void;
 }
+
+const LIKERT_VALUES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 export const QuizScreen: React.FC<QuizScreenProps> = ({
   questions,
@@ -24,30 +25,27 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
   const [viewMode, setViewMode] = useState<'step' | 'list'>('step');
   const [validationError, setValidationError] = useState('');
   const [showExplanation, setShowExplanation] = useState(false);
+  const advanceTimerRef = useRef<number | null>(null);
 
   const totalQuestions = questions.length;
   const answeredCount = Object.keys(answers).length;
   const progressPercent = Math.round((answeredCount / totalQuestions) * 100);
 
   const currentQuestion = questions[currentIndex];
-  const pillarMeta = PILLARS_INFO[currentQuestion.pillar];
 
-  // Keyboard navigation for step mode
+  useEffect(() => {
+    return () => {
+      if (advanceTimerRef.current) {
+        window.clearTimeout(advanceTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Keyboard navigation in step mode
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (viewMode !== 'step') return;
-
-      if (e.key === '1') {
-        const opt = currentQuestion.options[0];
-        if (opt) {
-          handleSelectOption(currentQuestion.id, opt.value);
-        }
-      } else if (e.key === '2') {
-        const opt = currentQuestion.options[1];
-        if (opt) {
-          handleSelectOption(currentQuestion.id, opt.value);
-        }
-      } else if (e.key === 'ArrowRight' && currentIndex < totalQuestions - 1) {
+      if (e.key === 'ArrowRight' && currentIndex < totalQuestions - 1) {
         setCurrentIndex((prev) => prev + 1);
       } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
         setCurrentIndex((prev) => prev - 1);
@@ -56,94 +54,150 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex, currentQuestion, viewMode, totalQuestions]);
+  }, [currentIndex, viewMode, totalQuestions]);
 
-  const handleSelectOption = (questionId: string, value: number) => {
+  const handleSelectValue = (questionId: string, value: number, autoAdvance = true) => {
     onAnswer(questionId, value);
     if (validationError) setValidationError('');
 
-    // In step mode, auto advance after 250ms for great fluid UX if not last question
-    if (viewMode === 'step' && currentIndex < totalQuestions - 1) {
-      setTimeout(() => {
+    if (autoAdvance && viewMode === 'step' && currentIndex < totalQuestions - 1) {
+      if (advanceTimerRef.current) {
+        window.clearTimeout(advanceTimerRef.current);
+      }
+      advanceTimerRef.current = window.setTimeout(() => {
         setCurrentIndex((prev) => Math.min(prev + 1, totalQuestions - 1));
-      }, 250);
+        setShowExplanation(false);
+      }, 280);
     }
   };
 
   const handleFinalSubmit = () => {
     if (answeredCount < totalQuestions) {
+      const missing = totalQuestions - answeredCount;
       setValidationError(
-        `Faltam ${totalQuestions - answeredCount} questão(ões) para você responder. Por favor, complete todas as perguntas para calcular sua pontuação PERMA com precisão científica.`
+        `Faltam ${missing} questão(ões) para concluir. Responda a todos os 23 itens na escala de 0 a 10 para calcular suas médias oficiais com precisão.`
       );
-      // Auto-jump to first unanswered in step mode
       const firstUnansweredIndex = questions.findIndex((q) => answers[q.id] === undefined);
-      if (firstUnansweredIndex !== -1 && viewMode === 'step') {
-        setCurrentIndex(firstUnansweredIndex);
+      if (firstUnansweredIndex !== -1) {
+        if (viewMode === 'step') {
+          setCurrentIndex(firstUnansweredIndex);
+        } else {
+          const el = document.getElementById(`question-${questions[firstUnansweredIndex].id}`);
+          el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
       }
       return;
     }
     onSubmit();
   };
 
+  const renderScaleButtons = (q: Question, autoAdvance: boolean) => {
+    const selectedVal = answers[q.id];
+    return (
+      <div>
+        <div
+          className="grid grid-cols-6 sm:grid-cols-11 gap-1.5 sm:gap-2"
+          role="radiogroup"
+          aria-label={`Escala de 0 a 10 para a questão ${q.number}`}
+        >
+          {LIKERT_VALUES.map((val) => {
+            const isSelected = selectedVal === val;
+            return (
+              <button
+                key={val}
+                type="button"
+                role="radio"
+                aria-checked={isSelected}
+                onClick={() => handleSelectValue(q.id, val, autoAdvance)}
+                className={`min-h-[44px] rounded-xl font-bold text-sm sm:text-base tabular-nums transition-all duration-150 cursor-pointer border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
+                  isSelected
+                    ? 'bg-indigo-600 border-indigo-500 dark:border-indigo-400 text-white shadow-lg shadow-indigo-600/25 scale-[1.03]'
+                    : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 dark:bg-slate-900/70 dark:border-slate-700/80 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:border-slate-500 dark:hover:text-white'
+                }`}
+              >
+                {val}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Semantic anchors */}
+        <div className="mt-2.5 flex items-center justify-between text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 px-0.5 gap-2">
+          <span className="text-left font-medium">
+            0 · {q.anchorMin}
+          </span>
+          <span className="text-center hidden sm:inline text-slate-400 dark:text-slate-500">
+            5 · {q.anchorMid}
+          </span>
+          <span className="text-right font-medium">
+            10 · {q.anchorMax}
+          </span>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
-      {/* Top Header & Progress */}
-      <div className="bg-slate-800/80 backdrop-blur-md border border-slate-700/80 rounded-2xl p-4 sm:p-5 mb-6 shadow-xl">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+      {/* Top Progress Header */}
+      <div className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 mb-6 shadow-md dark:shadow-xl">
+        <div className="flex items-center justify-between gap-3 mb-3">
+          <div className="flex items-center gap-2.5">
             <button
+              type="button"
               onClick={onCancel}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+              className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800 transition-colors cursor-pointer"
               title="Voltar ao início"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div>
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                Questionário de Bem-Estar
+              <span className="text-xs text-slate-500 dark:text-slate-400 font-medium block">
+                PERMA-Profiler Oficial · Escala Likert 0–10
               </span>
-              <h2 className="text-sm sm:text-base font-bold text-white">
-                Progresso: {answeredCount} de {totalQuestions} respondidas ({progressPercent}%)
+              <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white tabular-nums">
+                {answeredCount} de {totalQuestions} respondidas ({progressPercent}%)
               </h2>
             </div>
           </div>
 
-          {/* Action buttons */}
           <div className="flex items-center gap-2">
             {onLoadDemo && (
               <button
                 type="button"
                 onClick={onLoadDemo}
-                className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold text-indigo-300 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 transition-all cursor-pointer"
-                title="Pular e ver relatório com dados de exemplo"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 dark:text-indigo-300 dark:bg-indigo-500/10 dark:hover:bg-indigo-500/20 dark:border-indigo-500/30 transition-colors cursor-pointer whitespace-nowrap"
+                title="Pular e ver relatório oficial com dados de exemplo"
               >
-                <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-                <span>Ver Exemplo de Relatório</span>
+                <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                <span>Ver Exemplo</span>
               </button>
             )}
 
-            {/* Toggle view mode */}
-            <div className="flex items-center bg-slate-900/80 border border-slate-700 rounded-lg p-0.5 text-xs">
+            {/* Segmented View Toggle */}
+            <div className="flex items-center bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-0.5 text-xs">
               <button
+                type="button"
                 onClick={() => setViewMode('step')}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-all ${
+                className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md transition-colors cursor-pointer ${
                   viewMode === 'step'
-                    ? 'bg-indigo-600 text-white font-medium shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-indigo-600 text-white font-semibold'
+                    : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
                 }`}
-                title="Visualizar uma pergunta por vez"
+                title="Visualizar uma questão por vez"
               >
                 <Eye className="w-3.5 h-3.5" />
                 <span className="hidden xs:inline">Foco</span>
               </button>
               <button
+                type="button"
                 onClick={() => setViewMode('list')}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-all ${
+                className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md transition-colors cursor-pointer ${
                   viewMode === 'list'
-                    ? 'bg-indigo-600 text-white font-medium shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-indigo-600 text-white font-semibold'
+                    : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
                 }`}
-                title="Visualizar todas as perguntas em lista"
+                title="Visualizar todas as 23 questões em lista"
               >
                 <LayoutGrid className="w-3.5 h-3.5" />
                 <span className="hidden xs:inline">Lista</span>
@@ -153,153 +207,107 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden border border-slate-700/50">
+        <div className="w-full bg-slate-100 dark:bg-slate-950 h-2 rounded-full overflow-hidden border border-slate-200 dark:border-slate-800">
           <div
             className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 transition-all duration-300 rounded-full"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
 
-        {/* Question Selector Quick Grid */}
-        <div className="mt-3 pt-3 border-t border-slate-700/50 flex items-center justify-between gap-1 overflow-x-auto py-1">
-          <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap">
-            {questions.map((q, idx) => {
-              const isAnswered = answers[q.id] !== undefined;
-              const isCurrent = idx === currentIndex && viewMode === 'step';
-              return (
-                <button
-                  key={q.id}
-                  onClick={() => {
-                    setCurrentIndex(idx);
-                    if (viewMode === 'list') {
-                      const el = document.getElementById(`question-${q.id}`);
-                      el?.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
-                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-xs font-semibold flex items-center justify-center transition-all cursor-pointer ${
-                    isCurrent
-                      ? 'ring-2 ring-indigo-400 bg-indigo-600 text-white shadow-md'
-                      : isAnswered
-                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30'
-                      : 'bg-slate-700/50 text-slate-400 hover:bg-slate-700'
-                  }`}
-                  title={`Questão ${idx + 1}: ${q.pillarName}`}
-                >
-                  {idx + 1}
-                </button>
-              );
-            })}
-          </div>
+        {/* 23-Item Navigation Grid */}
+        <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center gap-1 sm:gap-1.5 flex-wrap">
+          {questions.map((q, idx) => {
+            const isAnswered = answers[q.id] !== undefined;
+            const isCurrent = idx === currentIndex && viewMode === 'step';
+            return (
+              <button
+                key={q.id}
+                type="button"
+                onClick={() => {
+                  setCurrentIndex(idx);
+                  setShowExplanation(false);
+                  if (viewMode === 'list') {
+                    const el = document.getElementById(`question-${q.id}`);
+                    el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }
+                }}
+                className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-xs font-semibold tabular-nums flex items-center justify-center transition-colors cursor-pointer ${
+                  isCurrent
+                    ? 'ring-2 ring-indigo-500 dark:ring-indigo-400 bg-indigo-600 text-white'
+                    : isAnswered
+                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/30 dark:hover:bg-emerald-500/30'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200'
+                }`}
+                title={`Questão ${q.number}`}
+              >
+                {q.number}
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* Validation alert banner */}
+      {/* Validation Banner */}
       {validationError && (
-        <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-start gap-3 text-rose-300 text-sm animate-shake">
-          <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
-          <div className="flex-1">
-            <p className="font-semibold text-rose-200">Atenção!</p>
-            <p className="text-xs sm:text-sm mt-0.5">{validationError}</p>
+        <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 dark:bg-rose-500/10 dark:border-rose-500/30 flex items-start gap-3 text-rose-800 dark:text-rose-200 text-sm">
+          <AlertCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+          <div>
+            <p className="font-semibold">Atenção</p>
+            <p className="text-xs sm:text-sm text-rose-700 dark:text-rose-300 mt-0.5">{validationError}</p>
           </div>
         </div>
       )}
 
-      {/* Step View Mode */}
+      {/* Step Mode */}
       {viewMode === 'step' && (
-        <div className="bg-slate-800/90 backdrop-blur-xl border border-slate-700/80 rounded-2xl p-6 sm:p-8 shadow-2xl relative">
-          {/* Pillar Header */}
-          <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-            <div className="flex items-center gap-2">
-              <span
-                className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${pillarMeta.bgLight}`}
-              >
-                Pilar {pillarMeta.letter}: {currentQuestion.pillarName}
-              </span>
-              <span className="text-xs text-slate-400 font-medium">
-                • {currentQuestion.category}
-              </span>
-            </div>
-
-            <span className="text-xs font-bold text-slate-400 bg-slate-900/60 px-2.5 py-1 rounded-md">
-              {currentIndex + 1} / {totalQuestions}
+        <div className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-lg dark:shadow-2xl">
+          {/* Neutral unboxed metadata line */}
+          <div className="flex items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400 mb-4">
+            <span className="font-medium tabular-nums">
+              Questão {currentQuestion.number} de {totalQuestions} · Escala de 0 a 10
             </span>
+            {answers[currentQuestion.id] !== undefined && (
+              <span className="text-emerald-600 dark:text-emerald-400 font-semibold tabular-nums">
+                Selecionado: {answers[currentQuestion.id]}/10
+              </span>
+            )}
           </div>
 
-          {/* Question Text */}
-          <h3 className="text-xl sm:text-2xl font-bold text-white mb-6 leading-snug">
+          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-7 leading-snug">
             {currentQuestion.text}
           </h3>
 
-          {/* Options */}
-          <div className="space-y-3 mb-6">
-            {currentQuestion.options.map((option, optIdx) => {
-              const isSelected = answers[currentQuestion.id] === option.value;
-              return (
-                <button
-                  key={optIdx}
-                  type="button"
-                  onClick={() => handleSelectOption(currentQuestion.id, option.value)}
-                  className={`w-full p-4 sm:p-5 rounded-xl border text-left transition-all duration-200 flex items-center justify-between group cursor-pointer ${
-                    isSelected
-                      ? 'bg-indigo-600/20 border-indigo-500 ring-2 ring-indigo-500/50 text-white shadow-lg shadow-indigo-950/40'
-                      : 'bg-slate-900/60 border-slate-700/70 text-slate-300 hover:border-slate-500 hover:bg-slate-900'
-                  }`}
-                >
-                  <div className="flex items-center gap-3.5">
-                    <span
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold transition-colors ${
-                        isSelected
-                          ? 'bg-indigo-600 text-white'
-                          : 'bg-slate-800 text-slate-400 group-hover:bg-slate-700'
-                      }`}
-                    >
-                      {optIdx + 1}
-                    </span>
-                    <span className="text-base sm:text-lg font-medium">
-                      {option.label}
-                    </span>
-                  </div>
+          {/* 0–10 Likert Selector */}
+          <div className="mb-6">{renderScaleButtons(currentQuestion, true)}</div>
 
-                  <div
-                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                      isSelected
-                        ? 'border-indigo-400 bg-indigo-500'
-                        : 'border-slate-600 group-hover:border-slate-400'
-                    }`}
-                  >
-                    {isSelected && <CheckCircle2 className="w-4 h-4 text-white" />}
-                  </div>
-                </button>
-              );
-            })}
+          {/* Optional explanation (keeps subscale hidden until user wants context) */}
+          <div className="mb-6 pt-3 border-t border-slate-200 dark:border-slate-800">
+            <button
+              type="button"
+              onClick={() => setShowExplanation(!showExplanation)}
+              className="text-xs text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 flex items-center gap-1.5 font-medium cursor-pointer"
+            >
+              <HelpCircle className="w-3.5 h-3.5" />
+              <span>{showExplanation ? 'Ocultar contexto científico' : 'Sobre este item'}</span>
+            </button>
+            {showExplanation && (
+              <p className="mt-2.5 text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-950/70 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 leading-relaxed">
+                <strong className="text-indigo-700 dark:text-indigo-300">{currentQuestion.subscaleName}:</strong>{' '}
+                {currentQuestion.explanation}
+              </p>
+            )}
           </div>
-
-          {/* Context / Explanation toggler */}
-          {currentQuestion.explanation && (
-            <div className="mb-6 pt-3 border-t border-slate-700/50">
-              <button
-                type="button"
-                onClick={() => setShowExplanation(!showExplanation)}
-                className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1.5 font-medium cursor-pointer"
-              >
-                <HelpCircle className="w-3.5 h-3.5" />
-                <span>{showExplanation ? 'Ocultar explicação' : 'Por que fazemos esta pergunta?'}</span>
-              </button>
-              {showExplanation && (
-                <p className="mt-2 text-xs text-slate-400 bg-slate-900/60 p-3 rounded-lg border border-slate-700/40 leading-relaxed">
-                  {currentQuestion.explanation}
-                </p>
-              )}
-            </div>
-          )}
 
           {/* Navigation Controls */}
           <div className="flex items-center justify-between pt-2">
             <button
               type="button"
               disabled={currentIndex === 0}
-              onClick={() => setCurrentIndex((prev) => Math.max(prev - 1, 0))}
-              className="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 bg-slate-900/80 border border-slate-700 hover:bg-slate-700 disabled:opacity-40 disabled:pointer-events-none transition-all flex items-center gap-1.5 cursor-pointer"
+              onClick={() => {
+                setCurrentIndex((prev) => Math.max(prev - 1, 0));
+                setShowExplanation(false);
+              }}
+              className="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 bg-slate-100 border border-slate-200 hover:bg-slate-200 dark:text-slate-300 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Anterior</span>
@@ -308,8 +316,11 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
             {currentIndex < totalQuestions - 1 ? (
               <button
                 type="button"
-                onClick={() => setCurrentIndex((prev) => Math.min(prev + 1, totalQuestions - 1))}
-                className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/30 transition-all flex items-center gap-1.5 cursor-pointer"
+                onClick={() => {
+                  setCurrentIndex((prev) => Math.min(prev + 1, totalQuestions - 1));
+                  setShowExplanation(false);
+                }}
+                className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors flex items-center gap-1.5 cursor-pointer"
               >
                 <span>Próxima</span>
                 <ArrowRight className="w-4 h-4" />
@@ -318,66 +329,41 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
               <button
                 type="button"
                 onClick={handleFinalSubmit}
-                className="px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-lg shadow-emerald-600/30 transition-all flex items-center gap-2 cursor-pointer"
+                className="px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-500 transition-colors flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-600/20 dark:shadow-emerald-950/50"
               >
                 <CheckCircle2 className="w-4 h-4" />
-                <span>Calcular Meu PERMA Score</span>
+                <span>Calcular Relatório PERMA</span>
               </button>
             )}
           </div>
         </div>
       )}
 
-      {/* List View Mode (All questions in one page) */}
+      {/* List Mode */}
       {viewMode === 'list' && (
         <div className="space-y-4">
-          {questions.map((q, idx) => {
-            const pMeta = PILLARS_INFO[q.pillar];
+          {questions.map((q) => {
+            const val = answers[q.id];
             return (
               <div
                 key={q.id}
                 id={`question-${q.id}`}
-                className="bg-slate-800/80 backdrop-blur-md border border-slate-700/80 rounded-2xl p-5 sm:p-6 shadow-md transition-all"
+                className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm dark:shadow-md"
               >
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${pMeta.bgLight}`}>
-                    {q.number}. {q.pillarName}
+                <div className="flex items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400 mb-2">
+                  <span className="font-semibold tabular-nums">
+                    Questão {q.number} de {totalQuestions}
                   </span>
-                  <span className="text-xs text-slate-400">
-                    {answers[q.id] !== undefined ? 'Respondida' : 'Pendente'}
+                  <span className={`font-semibold tabular-nums ${val !== undefined ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500'}`}>
+                    {val !== undefined ? `Nota: ${val}/10` : 'Pendente'}
                   </span>
                 </div>
 
-                <h4 className="text-base sm:text-lg font-bold text-white mb-4">
+                <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-4">
                   {q.text}
                 </h4>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {q.options.map((opt, oIdx) => {
-                    const isSelected = answers[q.id] === opt.value;
-                    return (
-                      <button
-                        key={oIdx}
-                        type="button"
-                        onClick={() => handleSelectOption(q.id, opt.value)}
-                        className={`p-3 rounded-xl border text-left text-sm font-medium transition-all flex items-center justify-between cursor-pointer ${
-                          isSelected
-                            ? 'bg-indigo-600/20 border-indigo-500 text-white font-semibold'
-                            : 'bg-slate-900/60 border-slate-700 text-slate-300 hover:bg-slate-900'
-                        }`}
-                      >
-                        <span>{opt.label}</span>
-                        <div
-                          className={`w-4 h-4 rounded-full border flex items-center justify-center ${
-                            isSelected ? 'border-indigo-400 bg-indigo-500' : 'border-slate-600'
-                          }`}
-                        >
-                          {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+                {renderScaleButtons(q, false)}
               </div>
             );
           })}
@@ -386,10 +372,10 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
             <button
               type="button"
               onClick={handleFinalSubmit}
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl text-base font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-xl shadow-emerald-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer mx-auto"
+              className="w-full sm:w-auto px-8 py-4 rounded-2xl text-base font-bold text-white bg-emerald-600 hover:bg-emerald-500 shadow-xl transition-colors flex items-center justify-center gap-2 cursor-pointer mx-auto"
             >
               <CheckCircle2 className="w-5 h-5" />
-              <span>Finalizar e Calcular Meu PERMA Score</span>
+              <span>Finalizar e Calcular Meu PERMA-Profiler</span>
             </button>
           </div>
         </div>

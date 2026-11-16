@@ -1,42 +1,35 @@
-import { PillarInfo } from '../types/perma';
+import { PillarInfo, TipsCategoryKey } from '../types/perma';
 
-export const PILLARS_INFO: Record<string, PillarInfo> = {
+export const PILLARS_INFO: Record<TipsCategoryKey, PillarInfo> = {
   pos: {
     key: 'pos',
     letter: 'P',
     name: 'Emoções Positivas',
     englishName: 'Positive Emotion',
-    tagline: 'Cultivar alegria, gratidão, esperança e serenidade no presente.',
+    tagline: 'Cultivar alegria, gratidão, serenidade e otimismo realista.',
     color: 'from-amber-400 to-orange-500',
     gradient: 'bg-gradient-to-r from-amber-500 to-orange-500',
-    bgLight: 'bg-amber-500/10 text-amber-300 border-amber-500/30',
+    bgLight: 'bg-amber-50/90 text-amber-900 border-amber-200 dark:bg-amber-500/10 dark:text-amber-300 dark:border-amber-500/30',
     borderColor: 'border-amber-500',
-    textColor: 'text-amber-400',
+    textColor: 'text-amber-700 dark:text-amber-400',
     iconName: 'Smile',
     description:
-      'As emoções positivas não são apenas um estado passageiro de prazer; elas ampliam nosso repertório intelectual e social, construindo resiliência biológica e psicológica contra o estresse.',
+      'As emoções positivas vão além do prazer imediato: segundo a teoria Broaden-and-Build de Barbara Fredrickson, elas ampliam a flexibilidade cognitiva, reduzem os efeitos fisiológicos do estresse e constroem recursos psicológicos duradouros.',
     tips: [
       {
-        title: 'Autorreflexão & Consciência Emocional',
+        title: 'Savoring (Saborear o Presente)',
         points: [
-          'Observe as oscilações naturais do seu humor durante o dia sem julgá-las duramente.',
-          'Pratique a técnica dos "3 Momentos Bons": anote três coisas simples que deram certo antes de dormir.',
-          'Identifique os gatilhos que drenam sua alegria e estabeleça limites saudáveis.'
+          'Pratique desacelerar intencionalmente durante experiências agradáveis simples (um café, uma caminhada, uma música), notando detalhes sensoriais sem checar o celular.',
+          'Adote o exercício "Três Coisas Boas" (Seligman): antes de dormir, registre 3 fatos positivos do dia e o porquê de eles terem acontecido.',
+          'Crie micro-pausas de 5 minutos entre blocos de trabalho para respirar e resetar o tônus emocional.'
         ]
       },
       {
-        title: 'Práticas de Gratidão e Otimismo',
+        title: 'Gratidão & Otimismo Aterrado',
         points: [
-          'Escreva ou envie uma mensagem sincera de agradecimento a alguém que fez a diferença na sua semana.',
-          'Ressignifique contratempos buscando o aprendizado prático que eles trazem.',
-          'Consuma intencionalmente conteúdos que tragam risadas, leveza e inspiração genuína.'
-        ]
-      },
-      {
-        title: 'Pequenos Passos, Grande Impacto',
-        points: [
-          'Lembre-se de que micro-momentos de contentamento diário geram transformações neuroquímicas profundas ao longo das semanas.',
-          'Reserve pelo menos 15 minutos do seu dia para uma atividade que gere puro prazer descompromissado.'
+          'Envie uma mensagem específica de agradecimento a alguém cujo gesto muitas vezes passa despercebido.',
+          'Ao enfrentar contratempos, distinga o que está sob seu controle imediato do que não está, evitando generalizações catastróficas.',
+          'Reduza a exposição passiva a fluxos de notícias e redes sociais logo ao acordar ou antes de dormir.'
         ]
       }
     ]
@@ -47,37 +40,28 @@ export const PILLARS_INFO: Record<string, PillarInfo> = {
     letter: 'E',
     name: 'Engajamento & Flow',
     englishName: 'Engagement',
-    tagline: 'Perder a noção do tempo em atividades que exigem suas maiores forças.',
+    tagline: 'Imersão profunda em desafios compatíveis com suas forças pessoais.',
     color: 'from-cyan-400 to-blue-600',
     gradient: 'bg-gradient-to-r from-cyan-500 to-blue-600',
-    bgLight: 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30',
+    bgLight: 'bg-cyan-50/90 text-cyan-900 border-cyan-200 dark:bg-cyan-500/10 dark:text-cyan-300 dark:border-cyan-500/30',
     borderColor: 'border-cyan-500',
-    textColor: 'text-cyan-400',
+    textColor: 'text-cyan-700 dark:text-cyan-400',
     iconName: 'Flame',
     description:
-      'O estado de Flow (Fluxo), teorizado por Mihaly Csikszentmihalyi e integrado por Seligman, ocorre quando nos fundimos com a atividade em um nível tão imersivo que o tempo parece parar e a autocrítica desaparece.',
+      'O engajamento psicológico (estado de Flow, descrito por Mihaly Csikszentmihalyi) surge quando nossas competências encontram um desafio estimulante na medida certa — gerando foco absoluto, curiosidade e perda da noção do tempo.',
     tips: [
       {
-        title: 'Diagnóstico do Estado de Fluxo',
+        title: 'Calibragem entre Desafio e Habilidade',
         points: [
-          'Avalie quais momentos da sua última semana fizeram você esquecer o celular e as preocupações.',
-          'Identifique suas principais forças de caráter (como curiosidade, criatividade, liderança ou bom humor).',
-          'Encontre o ponto ideal entre o nível do desafio e a sua competência para evitar tédio e ansiedade.'
+          'Se uma tarefa parece entediante, adicione um elemento de novidade, prazo curto ou melhoria de método; se gera ansiedade, quebre-a em subtarefas menores.',
+          'Mapeie suas 5 principais forças de caráter (curiosidade, criatividade, análise, perseverança, empatia) e aplique uma delas de forma nova nesta semana.'
         ]
       },
       {
-        title: 'Foco Profundo & Eliminação de Ruído',
+        title: 'Arquitetura de Foco Profundo',
         points: [
-          'Trabalhe ou estude em blocos ininterruptos (técnica Pomodoro ou sessões de 45-60 minutos no modo foco).',
-          'Desative notificações irrelevantes que fragmentam sua atenção em dezenas de pedaços durante o dia.',
-          'Crie rituais de entrada para atividades intelectuais ou artísticas (música instrumental, ambiente limpo).'
-        ]
-      },
-      {
-        title: 'Integração na Rotina',
-        points: [
-          'Aplique suas forças pessoais até mesmo em tarefas rotineiras (ex: transforme um relatório burocrático em um design visual cativante).',
-          'Pratique um hobby criativo manual ou corporal que demande dedicação e presença absoluta.'
+          'Reserve blocos protegidos de 45 a 60 minutos sem notificações ou alternância de abas para tarefas que exigem concentração plena.',
+          'Recupere hobbies analógicos ou práticos (música, culinária, esporte, escrita, jardinagem) que exijam coordenação e presença ativa, não apenas consumo passivo de telas.'
         ]
       }
     ]
@@ -88,37 +72,28 @@ export const PILLARS_INFO: Record<string, PillarInfo> = {
     letter: 'R',
     name: 'Relacionamentos Positivos',
     englishName: 'Relationships',
-    tagline: 'Construir laços autênticos, rede de apoio e amor mútuo.',
+    tagline: 'Vínculos de confiança, apoio mútuo e presença genuína.',
     color: 'from-pink-400 to-rose-600',
     gradient: 'bg-gradient-to-r from-pink-500 to-rose-600',
-    bgLight: 'bg-rose-500/10 text-rose-300 border-rose-500/30',
+    bgLight: 'bg-rose-50/90 text-rose-900 border-rose-200 dark:bg-rose-500/10 dark:text-rose-300 dark:border-rose-500/30',
     borderColor: 'border-rose-500',
-    textColor: 'text-rose-400',
+    textColor: 'text-rose-700 dark:text-rose-400',
     iconName: 'Users',
     description:
-      'Os seres humanos são criaturas hiper-sociais. Os estudos de Harvard sobre desenvolvimento adulto comprovam: a qualidade dos nossos relacionamentos interpessoais é o maior preditor isolado de saúde física e felicidade ao longo da vida.',
+      'Estudos longitudinais de décadas demonstram que a qualidade dos relacionamentos íntimos, familiares e comunitários é o preditor mais consistente de longevidade física, saúde cognitiva e satisfação vital.',
     tips: [
       {
-        title: 'Cultivo de Relações Saudáveis',
+        title: 'Resposta Ativo-Construtiva',
         points: [
-          'Priorize relacionamentos onde haja respeito mútuo, apoio incondicional e entusiasmo pelas suas vitórias.',
-          'Identifique relações tóxicas ou drenantes e construa limites protetivos cordiais.',
-          'Esteja presente por inteiro em conversas: guarde o celular e pratique a escuta ativa sem interromper.'
+          'Quando alguém próximo compartilhar uma boa notícia, reaja com entusiasmo autêntico e faça perguntas sobre a conquista — isso fortalece o vínculo mais do que apenas consolar em momentos difíceis.',
+          'Pratique presença sem telas em jantares, cafés ou conversas importantes.'
         ]
       },
       {
-        title: 'Construção da Rede de Apoio',
+        title: 'Construção Ativa de Rede de Apoio',
         points: [
-          'Não hesite em pedir ajuda quando estiver sob pressão; a vulnerabilidade corajosa estreita laços.',
-          'Esteja disponível para escutar seus amigos sem tentar consertar tudo imediatamente, oferecendo acolhimento.',
-          'Planeje encontros presenciais ou chamadas de vídeo com amigos e familiares queridos regularmente.'
-        ]
-      },
-      {
-        title: 'Comunicação Construtiva & Afeto',
-        points: [
-          'Celebre ativamente as conquistas alheias (resposta ativo-construtiva): comemore de verdade o sucesso de quem você ama.',
-          'Expresse afeto explícito com palavras, elogios sinceros e pequenos gestos de consideração cotidiana.'
+          'Não espere uma crise para retomar contatos importantes: envie uma mensagem genuína para um amigo ou familiar com quem não conversa há semanas.',
+          'Compartilhe dificuldades de forma honesta com pessoas de confiança; pedir ajuda fortalece a intimidade e reduz o isolamento percebido.'
         ]
       }
     ]
@@ -129,37 +104,28 @@ export const PILLARS_INFO: Record<string, PillarInfo> = {
     letter: 'M',
     name: 'Sentido & Propósito',
     englishName: 'Meaning',
-    tagline: 'Pertencer e servir a algo que você acredita ser maior do que o ego.',
+    tagline: 'Coerência entre seus valores diários e uma contribuição maior.',
     color: 'from-purple-400 to-indigo-600',
     gradient: 'bg-gradient-to-r from-purple-500 to-indigo-600',
-    bgLight: 'bg-purple-500/10 text-purple-300 border-purple-500/30',
+    bgLight: 'bg-purple-50/90 text-purple-900 border-purple-200 dark:bg-purple-500/10 dark:text-purple-300 dark:border-purple-500/30',
     borderColor: 'border-purple-500',
-    textColor: 'text-purple-400',
+    textColor: 'text-purple-700 dark:text-purple-400',
     iconName: 'Compass',
     description:
-      'O sentido de vida responde à pergunta: "Por que eu acordo todas as manhãs?". Ele ancora o ser humano em tempos de adversidade, transformando até os sofrimentos em etapas de crescimento e evolução.',
+      'O sentido de vida nasce do sentimento de pertencimento e serviço a algo que transcende o interesse puramente individual — seja uma causa, família, conhecimento, criação artística ou impacto comunitário.',
     tips: [
       {
-        title: 'Exploração Existencial & Valores',
+        title: 'Alinhamento de Valores e Rotina',
         points: [
-          'Liste seus três valores inegociáveis (ex: verdade, justiça, compaixão, aprendizado ou liberdade).',
-          'Avalie se a sua rotina atual reflete esses valores ou se você está operando no piloto automático.',
-          'Entenda que o sentido não é algo que se "encontra pronto", mas algo que você constrói com suas escolhas diárias.'
+          'Defina 3 valores centrais inegociáveis e observe quanto tempo da sua semana atual realmente reflete esses valores.',
+          'Pratique o "Job Crafting": reformule parte das suas responsabilidades profissionais ou de estudo para enfatizar quem é beneficiado pelo seu trabalho.'
         ]
       },
       {
-        title: 'Contribuição para Além de Si',
+        title: 'Serviço & Contribuição Concreta',
         points: [
-          'Dedique tempo a um ato voluntário, mentoria comunitária ou suporte a alguém em situação de vulnerabilidade.',
-          'Enxergue o impacto social indireto do seu trabalho: como o que você faz ajuda outras pessoas a viverem melhor?',
-          'Reduza o tempo gasto com consumismo superficial e comparação nas redes sociais.'
-        ]
-      },
-      {
-        title: 'Direção e Clareza',
-        points: [
-          'Escreva sua declaração pessoal de missão em uma ou duas frases inspiradoras.',
-          'Alinhe seus objetivos de longo prazo àquilo que você gostaria de deixar como legado duradouro no mundo.'
+          'Envolva-se em atos regulares de mentoria, voluntariado ou suporte prático a colegas e comunidade — ajudar outros é uma das vias mais rápidas para restaurar o senso de propósito.',
+          'Substitua horas de comparação social passiva por projetos pessoais alinhados ao legado que deseja construir.'
         ]
       }
     ]
@@ -170,39 +136,71 @@ export const PILLARS_INFO: Record<string, PillarInfo> = {
     letter: 'A',
     name: 'Realização & Maestria',
     englishName: 'Accomplishment',
-    tagline: 'Buscar o domínio, a competência e a vitória sobre metas autodeterminadas.',
+    tagline: 'Senso de competência, progresso contínuo e domínio pessoal.',
     color: 'from-emerald-400 to-teal-600',
     gradient: 'bg-gradient-to-r from-emerald-500 to-teal-600',
-    bgLight: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30',
+    bgLight: 'bg-emerald-50/90 text-emerald-900 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-300 dark:border-emerald-500/30',
     borderColor: 'border-emerald-500',
-    textColor: 'text-emerald-400',
+    textColor: 'text-emerald-700 dark:text-emerald-400',
     iconName: 'Award',
     description:
-      'A busca por realização nos impulsiona a atingir metas, desenvolver talentos e sentir o gosto da mestria. Ter orgulho do próprio esforço e saber finalizar projetos é vital para a autoestima sustentável.',
+      'A dimensão de realização reflete a busca intrínseca por competência, autonomia e conclusão de metas desafiadoras. Ela sustenta a autoeficácia e a confiança na própria capacidade de lidar com responsabilidades.',
     tips: [
       {
-        title: 'Reconheça suas Conquistas Passadas',
+        title: 'Visibilidade de Progresso',
         points: [
-          'Faça uma lista de tudo o que você já superou e construiu até hoje. Você já é um sobrevivente talentoso.',
-          'Combata a síndrome do impostor confrontando fatos e evidências reais com sensações infundadas de insuficiência.',
-          'Permita-se receber elogios e comemorar marcos importantes sem minimizar seu próprio mérito.'
+          'Divida objetivos grandes em entregas semanais mensuráveis e registre cada marco concluído — o cérebro precisa enxergar movimento para manter motivação.',
+          'Combata o perfeccionismo paralisante priorizando consistência sustentável em vez de picos exaustivos seguidos de abandono.'
         ]
       },
       {
-        title: 'Metas Claras e Micro-Vitórias',
+        title: 'Autocompaixão na Execução',
         points: [
-          'Adote metas no formato SMART (Específicas, Mensuráveis, Alcançáveis, Relevantes e Temporais).',
-          'Divida grandes projetos complexos em micro-tarefas diárias simples de concluir.',
-          'Comemore o progresso contínuo, não apenas a linha de chegada final.'
+          'Reconheça suas vitórias passadas sem minimizá-las automaticamente.',
+          'Ao falhar em uma meta, faça revisão objetiva de processo (horário, ambiente, clareza do passo) em vez de rotular sua capacidade pessoal.'
+        ]
+      }
+    ]
+  },
+
+  regulation: {
+    key: 'regulation',
+    letter: 'N/H',
+    name: 'Regulação Emocional & Saúde',
+    englishName: 'Emotional Regulation & Health',
+    tagline: 'Manejo de ansiedade, tristeza, estresse físico e solidão.',
+    color: 'from-rose-400 to-amber-500',
+    gradient: 'bg-gradient-to-r from-rose-500 to-amber-500',
+    bgLight: 'bg-rose-50/90 text-rose-900 border-rose-200 dark:bg-rose-500/10 dark:text-rose-300 dark:border-rose-500/30',
+    borderColor: 'border-rose-500',
+    textColor: 'text-rose-700 dark:text-rose-400',
+    iconName: 'HeartPulse',
+    description:
+      'No PERMA-Profiler oficial, emoções negativas, solidão e saúde física são medidas em paralelo aos 5 pilares positivos. Mesmo pessoas com boa realização ou propósito podem enfrentar sobrecarga ansiosa, exaustão corporal ou isolamento subjetivo.',
+    tips: [
+      {
+        title: 'Descompressão de Ansiedade, Raiva e Tristeza',
+        points: [
+          'Nomeie a emoção com precisão ("estou me sentindo sobrecarregado e tenso agora") — a rotulagem afetiva reduz a reatividade da amígdala cerebral.',
+          'Adote técnicas fisiológicas rápidas (respiração com expiração prolongada 4-6 segundos, caminhada ao ar livre sem áudio) antes de decisões difíceis.',
+          'Se emoções negativas intensas (tristeza ou ansiedade) persistirem acima de 6,0 por semanas, considere conversar com um psicólogo ou médico de confiança.'
         ]
       },
       {
-        title: 'Disciplina Gentil & Resiliência',
+        title: 'Base Física & Combate à Solidão',
         points: [
-          'Cultive o hábito de revisar suas metas semanalmente com auto-compaixão diante de imprevistos.',
-          'Veja os erros e atrasos como ajustes de rota e dados de aprendizado, jamais como condenação de capacidade.'
+          'Proteja os três pilares biológicos da estabilidade emocional: regularidade do sono, movimento físico moderado semanal e exposição à luz solar pela manhã.',
+          'Contra a solidão, priorize interações síncronas com pertencimento real (grupos de interesse, atividades presenciais ou ligações com voz) em vez de apenas rolar feeds digitais.'
         ]
       }
     ]
   }
 };
+
+export const CORE_PILLARS_LIST: PillarInfo[] = [
+  PILLARS_INFO.pos,
+  PILLARS_INFO.eng,
+  PILLARS_INFO.rel,
+  PILLARS_INFO.mea,
+  PILLARS_INFO.acc
+];
